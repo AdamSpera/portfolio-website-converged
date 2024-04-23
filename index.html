@@ -1,0 +1,76 @@
+<html>
+
+<head>
+  <title>Adam Spera's Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=12.0, minimum-scale=1.0, user-scalable=yes">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.912.0" data-gr-ext-installed=""><br>
+  <center>
+    <div style="display: inline-block; vertical-align:middle;">
+      <a href="/" class="title"><b>ADAM SPERA'S WEBSITE</b><br>
+      </a>
+      <hr>
+      <div style="text-align: justify;display: inline-block; width: 100%;">
+        <a class="title" href="about.html">ABOUT</a> 
+        &nbsp;
+        <a class="title" href="documentation.html">DOCUMENTATION</a>
+        &nbsp;
+        <a class="title" href="https://www.linkedin.com/in/adamtspera/">RESUME</a>
+      </div>
+    </div>
+  </center>
+  <br>
+  <br>
+  <div style="margin-bottom: 2ch;text-transform: none;">
+  </div>
+  <div class="heading">Welcome to my site!</div>
+  <hr>
+  <p>
+    This is my personal website where you can find info about myself, project showcases, and documentation I have gathered over the years.
+  </p>
+
+  <div class="heading">Articles</div>
+  <hr>
+  <p style="text-align: left; margin-bottom: 1ch;">
+    10/16/2023: <a target="_blank" href="https://www.linkedin.com/pulse/idiosplash-open-source-meraki-ipsk-solution-wireless-networks-spera-tyfde/">Open-Source Meraki IPSK Solution for Wireless Networks</a><br>
+    11/22/2024: <a target="_blank" href="https://www.linkedin.com/pulse/installing-cml-windows-11-using-vmware-player-adam-spera-xyzve/">Installing CML on Windows 11 using VMware Player</a><br>
+    04/07/2024: <a target="_blank" href="https://www.linkedin.com/posts/adamtspera_dpanel-presentation-activity-7183113085233049600-9Dcy?utm_source=share&utm_medium=member_desktop">Multiplatform Lightweight Docker Management System</a><br>
+  </p>
+
+  <div class="heading">Documentation</div>
+  <hr>
+  <div class="button-container">
+    <button class="toggle-button" onclick="filterByTopic('Networking')">Networking</button>
+    <button class="toggle-button" onclick="filterByTopic('Programming')">Programming</button>
+    <button class="toggle-button" onclick="filterByTopic('Automation')">Automation</button>
+    <button class="toggle-button" onclick="filterByTopic('Enterprise')">Enterprise</button>
+    <button class="toggle-button" onclick="filterByTopic('Data Center')">Data Center</button>
+    <button class="toggle-button" onclick="filterByTopic('Service Provider')">Service Provider</button>
+  </div>
+  <p style="text-align: left; margin-bottom: 1ch; margin-top: 1ch;">
+    <a href="">Virtual Extensible LAN (VXLAN)</a><br>
+    <a href="">Application Centric Infrastructure (ACI)</a><br>
+    <a href="">Link Aggregation Control Protocol (LACP)</a><br>
+  </p>
+
+  <br>
+  <p style="display: block;" rel="me">
+    <center>*</center>
+  </p>
+
+  <script>
+    function filterByTopic(topic) {
+      event.target.classList.toggle('active');
+
+      var activeButtons = document.getElementsByClassName('toggle-button active');
+      var activeTopics = Array.from(activeButtons).map(button => button.textContent);
+
+      // Implement your filtering logic here using activeTopics
+      console.log(activeTopics);
+    }
+  </script>
+</body>
+
+</html>
