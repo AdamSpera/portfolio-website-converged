@@ -15,7 +15,7 @@
       <div style="text-align: justify;display: inline-block; width: 100%;">
         <a class="title" href="about.html" target="_blank">ABOUT</a> 
         &nbsp;
-        <a class="title" href="documentation.html" target="_blank">DOCUMENTATION</a>
+        <a class="title" href="https://www.linkedin.com/in/adamtspera/" target="_blank">LINKEDIN</a>
         &nbsp;
         <a class="title" href="Adam_T_Spera_Resume.pdf" target="_blank">RESUME</a>
       </div>
@@ -49,10 +49,11 @@
     <button class="toggle-button" onclick="filterByTopic('Data Center')">Data Center</button>
     <button class="toggle-button" onclick="filterByTopic('Service Provider')">Service Provider</button>
   </div>
-  <p style="text-align: left; margin-bottom: 1ch; margin-top: 1ch;">
-    <a href="">Virtual Extensible LAN (VXLAN)</a><br>
-    <a href="">Application Centric Infrastructure (ACI)</a><br>
-    <a href="">Link Aggregation Control Protocol (LACP)</a><br>
+  <p class="docs" style="text-align: left; margin-bottom: 1ch; margin-top: 1ch;">
+    - <a href="" data-topic="ND">Virtual Extensible LAN (VXLAN)</a><br>
+    - <a href="" data-topic="ND">Application Centric Infrastructure (ACI)</a><br>
+    - <a href="" data-topic="NE">Link Aggregation Control Protocol (LACP)</a><br>
+    - <a href="" data-topic="PA">Netmiko Python Library for SSH</a><br>
   </p>
 
   <br>
@@ -65,9 +66,20 @@
       event.target.classList.toggle('active');
 
       var activeButtons = document.getElementsByClassName('toggle-button active');
-      var activeTopics = Array.from(activeButtons).map(button => button.textContent);
+      var activeTopics = Array.from(activeButtons).map(button => button.textContent[0]);
 
-      // Implement your filtering logic here using activeTopics
+      var links = document.querySelectorAll('.docs a');
+      links.forEach(link => {
+        var linkTopics = link.getAttribute('data-topic');
+        var isActive = activeTopics.some(activeTopic => linkTopics.includes(activeTopic));
+        
+        if (activeTopics.length > 0) {
+          link.classList.toggle('grey-out', !isActive);
+        } else {
+          link.classList.remove('grey-out');
+        }
+      });
+
       console.log(activeTopics);
     }
   </script>

@@ -136,3 +136,11 @@ code {
 .toggle-button.active {
   background-color: #bbb;
 }
+
+.docs > a {
+  text-decoration: none;
+}
+
+.grey-out {
+  color: grey;
+}
