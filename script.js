@@ -5,6 +5,7 @@ $(window).on('popstate', function () {
   if (!doc) {
     $('#docs').empty().hide();
     $('#home').show();
+    $(document).prop('title', 'Adam Spera | Home');
   } else {
     loadDoc(doc);
   }
@@ -79,7 +80,9 @@ function loadDoc(doc) {
       $('#docs').append(html);
       $('#docs').find('h1, h2, h3, h4, h5, h6').addClass('heading');
       $('#docs').find('h1, h2, h3, h4, h5, h6').after('<hr>');
-      // $('#docs').find('hr:first').after('<br>');
+
+      // Change the page title to the name of the file
+      $(document).prop('title', doc.split('] ')[1].split('.md')[0]);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       console.error('Error making AJAX request to /documentation:', textStatus, errorThrown);
