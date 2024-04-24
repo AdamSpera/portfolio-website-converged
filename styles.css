@@ -53,12 +53,6 @@ pre {
   margin-top: 4ch;
 }
 
-@media (max-width: 500px) {
-  * {
-    font-size: 12px;
-  }
-}
-
 .title {
   text-decoration: none;
 }
@@ -131,4 +125,14 @@ table th {
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 5px;
+}
+
+@media (max-width: 500px) {
+  * {
+    font-size: 12px;
+  }
+  .toggle-button, .category-button {
+    font-size: 11px;
+    padding: 0.6ch 1.1ch;
+  }
 }
