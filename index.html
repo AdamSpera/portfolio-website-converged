@@ -89,6 +89,7 @@
       if(lastRequestTime && currentTime - lastRequestTime < 24 * 60 * 60 * 1000) {
         // less than a day has passed since the last request, use cached data
         var result = JSON.parse(localStorage.getItem('cachedData'));
+        console.log('Using cached documentation data:', result);
         populateDocs(result);
       } else {
         // a day or more has passed since the last request, make a new request
