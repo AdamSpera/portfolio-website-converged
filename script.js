@@ -97,7 +97,7 @@ function populateDocs(result) {
       return;
     }
     return file.name;
-  });
+  }).filter(Boolean);
 
   var docsElement = $(".docs");
   docsElement.empty();
