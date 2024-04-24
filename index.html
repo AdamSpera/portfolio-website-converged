@@ -29,19 +29,73 @@
     </p>
 
     <!-- ARTICLES section -->
-    <div class="heading">Articles</div>
+    <div class="heading">Things I've Done</div>
     <hr>
-    <p style="text-align: left; margin-bottom: 1ch;">
-      10/16/2023: <a target="_blank"
-        href="https://www.linkedin.com/pulse/idiosplash-open-source-meraki-ipsk-solution-wireless-networks-spera-tyfde/">Open-Source
-        Meraki IPSK Solution for Wireless Networks</a><br>
-      11/22/2024: <a target="_blank"
-        href="https://www.linkedin.com/pulse/installing-cml-windows-11-using-vmware-player-adam-spera-xyzve/">Installing
-        CML on Windows 11 using VMware Player</a><br>
-      04/07/2024: <a target="_blank"
-        href="https://www.linkedin.com/posts/adamtspera_dpanel-presentation-activity-7183113085233049600-9Dcy?utm_source=share&utm_medium=member_desktop">Multiplatform
-        Lightweight Docker Management System</a><br>
-    </p>
+
+    <div class="button-container" style="margin-bottom: 0.8ch;">
+      <button class="category-button active">Articles</button>
+      <button class="category-button">Projects</button>
+      <button class="category-button">Certifications</button>
+    </div>
+
+    <div id="Articles" style="display: block;">
+      <!-- <span style="visibility: hidden;">00/00/000: </span>&nbsp;[Articles]<br> -->
+      <p style="text-align: left; margin-bottom: 1ch;">
+        10/16/2023: <a target="_blank"
+          href="https://www.linkedin.com/pulse/idiosplash-open-source-meraki-ipsk-solution-wireless-networks-spera-tyfde/">Open-Source
+          Meraki IPSK Solution for Wireless Networks</a><br>
+        11/22/2024: <a target="_blank"
+          href="https://www.linkedin.com/pulse/installing-cml-windows-11-using-vmware-player-adam-spera-xyzve/">Installing
+          CML on Windows 11 using VMware Player</a><br>
+        04/07/2024: <a target="_blank"
+          href="https://www.linkedin.com/posts/adamtspera_dpanel-presentation-activity-7183113085233049600-9Dcy?utm_source=share&utm_medium=member_desktop">Multiplatform
+          Lightweight Docker Management System</a><br>
+      </p>
+    </div>
+
+    <div id="Projects" style="display: none;">
+      <!-- <span style="visibility: hidden;">00/00/000: </span>&nbsp;[Projects]<br> -->
+      <p style="text-align: left; margin-bottom: 1ch;">
+        06/25/2022: <a target="_blank" href="https://laundrylott.com/">LaundryLott - University Laundry Rush
+          Solution</a><br>
+        07/09/2022: <a target="_blank" href="https://github.com/AdamSpera/nodeacle">Nodacle - Automated Oracle Cloud VM
+          NodeJS Provisioning</a><br>
+        05/18/2023: <a target="_blank" href="https://adamspera.dev/#confidential">
+          XLinks API - Automated L2VPN Configuration Interface</a><br>
+        05/25/2023: <a target="_blank" href="https://adamspera.dev/#confidential">
+          GCT Portal - Global Case Transfer Portal Application</a><br>
+        02/26/2023: <a target="_blank"
+          href="https://developer.cisco.com/codeexchange/github/repo/AdamSpera/meraki-excap-cloudflare">Excap Cloudflare
+          - Meraki Guest WiFi Solution</a><br>
+        10/16/2023: <a target="_blank"
+          href="https://www.linkedin.com/pulse/idiosplash-open-source-meraki-ipsk-solution-wireless-networks-spera-tyfde?trackingId=SDnySrjrTdCV92mfJhj0yw%3D%3D&lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BP2b1BTOKT0KSsRf4yLU59g%3D%3D">
+          IdioSplash - Open-Source Meraki IPSK Solution</a><br>
+        11/22/2023: <a target="_blank"
+          href="https://github.com/AdamSpera/arcadia-cerification-program/blob/main/Computer_Science_Certification_Policies_Proposal-6.pdf">AU
+          Cert Program - Earn Certifications for Credits</a><br>
+        02/07/2024: <a target="_blank" href="https://github.com/AdamSpera/configconsult">ConfigConsult - Debug Cisco IOS
+          XE Configs Visually</a><br>
+        04/21/2024: <a target="_blank"
+          href="https://www.linkedin.com/posts/adamtspera_dpanel-presentation-activity-7183113085233049600-9Dcy?utm_source=share&utm_medium=member_desktop">DPanel
+          - Multiplatform Lightweight Docker System</a><br>
+      </p>
+    </div>
+
+    <div id="Certifications" style="display: none;">
+      <!-- <span style="visibility: hidden;">00/00/000: </span>&nbsp;[Education]<br> -->
+      <p style="text-align: left; margin-bottom: 1ch;">
+        03/20/2024: <strong>DevNet Specialist: Data Center Automation and Programmability</strong><br>
+        03/08/2024: <strong>Fortinet Certified Associate Cybersecurity (NSE 2)</strong><br>
+        03/06/2024: <strong>Fortinet Certified Fundamentals Cybersecurity (NSE 1)</strong><br>
+        07/07/2023: <strong>Cisco Certified Network Professional (CCNP Enterprise)</strong><br>
+        05/18/2023: <strong>Cisco Certified DevNet Professional (DevNet Professional)</strong><br>
+        04/28/2023: <strong>DevNet Specialist: Enterprise Automation and Programmability</strong><br>
+        04/12/2023: <strong>Cisco Certified DevNet Associate (DevNet Associate)</strong><br>
+        03/31/2023: <strong>Cisco Certified Network Associate (CCNA)</strong><br>
+        05/03/2021: <strong>Google Analytics Individual Qualification</strong><br>
+        02/21/2017: <strong>Microsoft Technology Associate - Java (MTA) </strong><br>
+      </p>
+    </div>
 
     <!-- DOCUMENTATION section -->
     <div class="heading">Documentation</div>
@@ -62,12 +116,13 @@
     </p>
 
   </div>
+
   <!-- END HOME -->
 
   <div id="footer-section"></div>
 
   <script>
-    $(window).on('popstate', function() {
+    $(window).on('popstate', function () {
       var params = new URLSearchParams(window.location.search);
       var doc = params.get('doc');
 
@@ -86,7 +141,7 @@
       var lastRequestTime = localStorage.getItem('lastRequestTime');
       var currentTime = new Date().getTime();
 
-      if(lastRequestTime && currentTime - lastRequestTime < 24 * 60 * 60 * 1000) {
+      if (lastRequestTime && currentTime - lastRequestTime < 24 * 60 * 60 * 1000) {
         // less than a day has passed since the last request, use cached data
         var result = JSON.parse(localStorage.getItem('cachedData'));
         console.log('Using cached documentation data:', result);
@@ -115,6 +170,23 @@
       if (doc) {
         loadDoc(doc);
       }
+
+      $('.category-button').click(function() {
+        // Hide all sections
+        $('#Articles').hide();
+        $('#Projects').hide();
+        $('#Certifications').hide();
+
+        // Remove active class from all buttons
+        $('.category-button').removeClass('active');
+
+        // Add active class to the clicked button
+        $(this).addClass('active');
+
+        // Show the selected section
+        var category = $(this).text();
+        $('#' + category).show();
+      });
 
     });
 

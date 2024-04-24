@@ -84,7 +84,7 @@ code {
   gap: 1ch;
 }
 
-.toggle-button {
+.toggle-button, .category-button {
   font-family: fabfont, monospace;
   font-size: 13px;
   padding: 0.9ch 1.4ch;
@@ -93,7 +93,7 @@ code {
   cursor: pointer;
 }
 
-.toggle-button.active {
+.toggle-button.active, .category-button.active {
   background-color: #bbb;
 }
 
