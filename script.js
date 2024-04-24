@@ -92,6 +92,9 @@ function loadDoc(doc) {
 
 function populateDocs(result) {
   var fileNames = result.map(function (file) {
+    if (file.type !== 'file') {
+      return null;
+    }
     return file.name;
   })
 
@@ -99,9 +102,6 @@ function populateDocs(result) {
   docsElement.empty();
 
   fileNames.forEach(function (fileName) {
-    if (!fileName.endsWith('.md')) {
-      return;
-    }
     var splitName = fileName.split(' ');
     var topics = splitName[0];
     var name = splitName.slice(1).join(' ').replace('.md', '');
