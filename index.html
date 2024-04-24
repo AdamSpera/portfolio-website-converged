@@ -132,30 +132,34 @@
     }
 
     function populateDocs(result) {
-      var fileNames = result.map(function (file) {
-        return file.name;
-      });
-
-      var docsElement = $(".docs");
-      docsElement.empty();
-
-      fileNames.forEach(function (fileName) {
-        var splitName = fileName.split(' ');
-        var topics = splitName[0];
-        var name = splitName.slice(1).join(' ').replace('.md', '');
-
-        // Remove the tags from the name
-        name = name.replace(/\[.*?\]/g, '').trim();
-
-        var link = $("<a href='#' data-topic='" + topics + "'>" + name + "</a>");
-        link.click(function (e) {
-          e.preventDefault();
-          window.history.pushState({}, '', '?doc=' + encodeURIComponent(topics + " " + name));
-          loadDoc(topics + " " + name);
+      if (Array.isArray(result)) {
+        var fileNames = result.map(function (file) {
+          return file.name;
         });
 
-        docsElement.append("- ").append(link).append("<br>");
-      });
+        var docsElement = $(".docs");
+        docsElement.empty();
+
+        fileNames.forEach(function (fileName) {
+          var splitName = fileName.split(' ');
+          var topics = splitName[0];
+          var name = splitName.slice(1).join(' ').replace('.md', '');
+
+          // Remove the tags from the name
+          name = name.replace(/\[.*?\]/g, '').trim();
+
+          var link = $("<a href='#' data-topic='" + topics + "'>" + name + "</a>");
+          link.click(function (e) {
+            e.preventDefault();
+            window.history.pushState({}, '', '?doc=' + encodeURIComponent(topics + " " + name));
+            loadDoc(topics + " " + name);
+          });
+
+          docsElement.append("- ").append(link).append("<br>");
+        });
+      } else {
+        console.error('Expected an array but got', result);
+      }
     }
 
     function filterByTopic(topic) {
