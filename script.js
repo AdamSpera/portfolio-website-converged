@@ -93,9 +93,7 @@ function loadDoc(doc) {
 function populateDocs(result) {
   var fileNames = result.map(function (file) {
     return file.name;
-  }).filter(function (name) {
-    return name !== 'media';  // Exclude the 'media' folder
-  });
+  })
 
   var docsElement = $(".docs");
   docsElement.empty();
