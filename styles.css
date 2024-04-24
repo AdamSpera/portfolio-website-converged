@@ -132,7 +132,11 @@ table th {
     font-size: 12px;
   }
   .toggle-button, .category-button {
+    font-family: fabfont, monospace;
     font-size: 11px;
     padding: 0.6ch 1.1ch;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
   }
 }
