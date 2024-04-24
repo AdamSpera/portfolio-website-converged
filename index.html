@@ -5,6 +5,7 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=12.0, minimum-scale=1.0, user-scalable=yes">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -12,6 +13,8 @@
   <br>
 
   <div id="header-section"></div>
+
+  <div id="docs" style="display: none;"></div>
 
   <!-- START HOME -->
   <div id="home">
@@ -63,30 +66,96 @@
   <div id="footer-section"></div>
 
   <script>
+    $(window).on('popstate', function() {
+      var params = new URLSearchParams(window.location.search);
+      var doc = params.get('doc');
+
+      if (!doc) {
+        $('#docs').empty().hide();
+        $('#home').show();
+      } else {
+        loadDoc(doc);
+      }
+    });
+
     $(document).ready(function () {
       $("#header-section").load("includes/header.html");
       $("#footer-section").load("includes/footer.html");
 
-      var repoOwner = "adamspera"; // replace with the username of the repo owner
-      var repoName = "portfolio-website-converged"; // replace with the name of the repo
-      var folderPath = "documentation"; // replace with the path to the folder
+      var lastRequestTime = localStorage.getItem('lastRequestTime');
+      var currentTime = new Date().getTime();
+
+      if(lastRequestTime && currentTime - lastRequestTime < 24 * 60 * 60 * 1000) {
+        // less than a day has passed since the last request, use cached data
+        var result = JSON.parse(localStorage.getItem('cachedData'));
+        populateDocs(result);
+      } else {
+        // a day or more has passed since the last request, make a new request
+        $.ajax({
+          url: "/documentation",
+          cache: true,
+          success: function (result) {
+            // store the time of the request and the data in localStorage
+            localStorage.setItem('lastRequestTime', currentTime);
+            localStorage.setItem('cachedData', JSON.stringify(result));
+            populateDocs(result);
+          }
+        });
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      var doc = params.get('doc');
+
+      if (doc) {
+        loadDoc(doc);
+      }
+
+    });
+
+    function loadDoc(doc) {
+      $('#home').hide();
+      $('#docs').show();
 
       $.ajax({
-        url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + folderPath,
-        success: function(result){
-          var fileNames = result.map(function(file) {
-            return file.name;
-          });
-
-          var docsElement = $(".docs");
-          docsElement.empty();
-
-          fileNames.forEach(function(fileName) {
-            docsElement.append("- <a href='" + fileName + "' data-topic='N'>" + fileName + "</a><br>");
-          });
+        url: "/documentation/" + encodeURIComponent(doc) + ".md",
+        dataType: "text",
+        success: function (result) {
+          var converter = new showdown.Converter();
+          var html = converter.makeHtml(result);
+          $('#docs').append(html);
+          $('#docs').find('h1, h2, h3, h4, h5, h6').addClass('heading');
+          $('#docs').find('h1, h2, h3, h4, h5, h6').after('<hr>');
+          // $('#docs').find('hr:first').after('<br>');
         }
       });
-    });
+    }
+
+    function populateDocs(result) {
+      var fileNames = result.map(function (file) {
+        return file.name;
+      });
+
+      var docsElement = $(".docs");
+      docsElement.empty();
+
+      fileNames.forEach(function (fileName) {
+        var splitName = fileName.split(' ');
+        var topics = splitName[0];
+        var name = splitName.slice(1).join(' ').replace('.md', '');
+
+        // Remove the tags from the name
+        name = name.replace(/\[.*?\]/g, '').trim();
+
+        var link = $("<a href='#' data-topic='" + topics + "'>" + name + "</a>");
+        link.click(function (e) {
+          e.preventDefault();
+          window.history.pushState({}, '', '?doc=' + encodeURIComponent(topics + " " + name));
+          loadDoc(topics + " " + name);
+        });
+
+        docsElement.append("- ").append(link).append("<br>");
+      });
+    }
 
     function filterByTopic(topic) {
       $(event.target).toggleClass('active');

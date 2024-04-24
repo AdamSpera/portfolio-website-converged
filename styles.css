@@ -24,6 +24,11 @@ html {
   background: #F5F5F0;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
 a {
   color: black;
   font-weight: bold;
@@ -53,7 +58,7 @@ pre {
   overflow: hidden;
 }
 
-div.heading {
+.heading {
   font-weight: bold;
   text-transform: uppercase;
   margin-top: 4ch;
@@ -151,4 +156,24 @@ code {
 
 .grey-out {
   color: grey;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+table, td {
+  padding-right: 1ch;
+  padding-top: 0.8ch;
+  padding-bottom: 0.8ch;
+  padding-left: 20px;
+  text-align: right;
+}
+
+table th {
+  font-weight: bold;
+  background-color: #BBB;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 5px;
 }

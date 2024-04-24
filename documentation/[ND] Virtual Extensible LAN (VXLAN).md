@@ -1,14 +1,7 @@
+<div style="margin-bottom: 2ch;text-transform: none;">
+January 8th, 2024</div>
+
 # Virtual Extensible LAN (VXLAN)
-
-![Exam](https://img.shields.io/badge/DCCOR-8A2BE2)
-![Last Updated](https://img.shields.io/badge/Last%20Updated-2024--01--08-blue)
-
-![Keyword](https://img.shields.io/badge/VXLAN-darkgreen)
-![Keyword](https://img.shields.io/badge/Virtual%20Extensible%20LAN-darkgreen)
-
-<hr>
-
-## Overview
 
 VXLAN, or Virtual Extensible LAN, is a network technology that allows us to create a logical network for virtual machines, across different networks. In simpler terms, it extends a LAN (L2) to include machines that are physically on different networks.
 
@@ -26,17 +19,32 @@ The key components of VXLAN are:
 
 Remember, VXLAN requires a larger MTU size (9216/9214 bytes) due to the extra VXLAN headers.
 
-## Terminology
-
-**VXLAN**: Virtual Extensible LAN
-
-**VTEP**: VXLAN Tunnel End Point
-
-**VNI**: Virtual Network Identifier
-
-**NVE**: Network Virtualization Edge
-
-**EVPN**: Ethernet Virtual Private Network
+<table>
+  <tr>
+    <th>Term</th>
+    <th>Definition</th>
+  </tr>
+  <tr>
+    <td>VXLAN</td>
+    <td>Virtual Extensible LAN</td>
+  </tr>
+  <tr>
+    <td>VTEP</td>
+    <td>VXLAN Tunnel End Point</td>
+  </tr>
+  <tr>
+    <td>VNI</td>
+    <td>Virtual Network Identifier</td>
+  </tr>
+  <tr>
+    <td>NVE</td>
+    <td>Network Virtualization Edge</td>
+  </tr>
+  <tr>
+    <td>EVPN</td>
+    <td>Ethernet Virtual Private Network</td>
+  </tr>
+</table>
 
 ## Configuration
 
@@ -70,8 +78,7 @@ Remember: MTU 9216 is needed for VXLAN.
 #### Prerequisites
 
 <pre>
-<span>All Devices</span>
-<hr>feature ospf
+feature ospf
 feature bgp
 feature pim
 feature interface-vlan
