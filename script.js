@@ -93,7 +93,7 @@ function loadDoc(doc) {
 function populateDocs(result) {
   var fileNames = result.map(function (file) {
     console.log(file);
-    if (file.type !== 'file') {
+    if (file.type == 'dir') {
       return;
     }
     return file.name;
