@@ -73,7 +73,7 @@ Remember: MTU 9216 is needed for VXLAN.
   <label for="option3">EVPN</label><br>
 </form>
 
-<main>![VXLAN Basic](../../../../media/vxlan_base.png)</main>
+<img src='documentation/media/vxlan_base.png' class='border'></img>
 
 #### Prerequisites
 
