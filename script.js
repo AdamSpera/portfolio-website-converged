@@ -26,7 +26,7 @@ $(document).ready(function () {
   } else {
     // a day or more has passed since the last request, make a new request
     $.ajax({
-      url: "https://api.github.com/repos/adamspera/portfolio-website-converged/contents/documentation",
+      url: "https://api.github.com/repos/adamspera/adamspera.dev/contents/documentation",
       cache: true,
       success: function (result) {
         console.log('Successfully fetched documentation data:', result);
