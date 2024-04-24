@@ -92,11 +92,12 @@ function loadDoc(doc) {
 
 function populateDocs(result) {
   var fileNames = result.map(function (file) {
+    console.log(file);
     if (file.type !== 'file') {
-      return null;
+      return;
     }
     return file.name;
-  })
+  });
 
   var docsElement = $(".docs");
   docsElement.empty();
