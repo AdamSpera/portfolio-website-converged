@@ -3,241 +3,135 @@ April 24th, 2024</div>
 
 # Virtual Extensible LAN (VXLAN)
 
-VXLAN, or Virtual Extensible LAN, is a network technology that allows us to create a logical network for virtual machines, across different networks. In simpler terms, it extends a LAN (L2) to include machines that are physically on different networks.
+Virtual Extensible LAN (VXLAN) provides a way to extend Layer 2 networks across a Layer 3 infrastructure using MAC-in-UDP encapsulation and tunneling. This allows for the creation of logical Layer 2 networks on top of a Layer 3 network. VXLAN is defined in [RFC 7348](https://tools.ietf.org/html/rfc7348).
 
-Imagine you have two computers in different cities, but you want them to behave as if they're on the same local network. VXLAN can help you do that. It encapsulates the original data packets, sending them through a 'tunnel' to the destination, where they're de-encapsulated and processed normally. This tunneling process is invisible to the computers, so they behave as if they're on the same network.
+VXLAN uses a 24-bit segment ID, the VXLAN network identifier (VNID). This allows a maximum of 16 million VXLAN segments to coexist in the same administrative domain. In comparison, traditional VLANs use a 12-bit segment ID that can support a maximum of 4096 VLANs.
 
-The key components of VXLAN are:
+<img src="documentation/media/vxlan_packet.png" class="border">
+VXLAN Packet Format
 
-- **VXLAN Tunnel End Point (VTEP)**: This is the entity where encapsulation and de-encapsulation of VXLAN packets occur.
+# VXLAN Tunnel Endpoint
 
-- **Virtual Network Identifier (VNI)**: This is used to identify the VXLAN segment. Each segment has a unique VNI.
+VXLAN tunnel endpoints (VTEPs) are devices that terminate VXLAN tunnels. They perform VXLAN encapsulation and de-encapsulation. Each VTEP has two interfaces. One is a Layer 2 interface on the local LAN segment to support a local endpoint communication through bridging. The other is a Layer 3 interface on the IP transport network.
 
-- **Network Virtualization Edge (NVE)**: This refers to the device doing the encapsulation and de-encapsulation.
+The IP interface has a unique address that identifies the VTEP device in the transport network. The VTEP device uses this IP address to encapsulate Ethernet frames and transmit the packets on the transport network. A VTEP discovers other VTEP devices that share the same VNIs it has locally connected.
 
-- **Ethernet Virtual Private Network (EVPN)**: This is often used with VXLAN for routing and control plane operations.
+# Distributed Anycast Gateway
 
-Remember, VXLAN requires a larger MTU size (9216/9214 bytes) due to the extra VXLAN headers.
+Distributed Anycast Gateway refers to the use of default gateway addressing that uses the same IP and MAC address across all the leafs that are a part of a VNI. This ensures that every leaf can function as the default gateway for the workloads directly connected to it. 
 
-<table>
-  <tr>
-    <th>Term</th>
-    <th>Definition</th>
-  </tr>
-  <tr>
-    <td>VXLAN</td>
-    <td>Virtual Extensible LAN</td>
-  </tr>
-  <tr>
-    <td>VTEP</td>
-    <td>VXLAN Tunnel End Point</td>
-  </tr>
-  <tr>
-    <td>VNI</td>
-    <td>Virtual Network Identifier</td>
-  </tr>
-  <tr>
-    <td>NVE</td>
-    <td>Network Virtualization Edge</td>
-  </tr>
-  <tr>
-    <td>EVPN</td>
-    <td>Ethernet Virtual Private Network</td>
-  </tr>
-</table>
+# Control Plane Types
 
-## Configuration
+There are two widely adopted control planes that are used with VXLAN:
 
-Remember: MTU 9216 is needed for VXLAN.
+**Flood and Learn Multicast-Based Learning**
 
-### Configurations
+- When configuring VXLAN with a multicast based control plane, every VTEP configured with a specific VXLAN VNI joins the same multicast group. Each VNI could have its own multicast group, or several VNIs can share the same group. 
+- The multicast group is used to forward broadcast, unknown unicast, and multicast (BUM) traffic for a VNI.
 
-**Config Steps Checklist**
+**VXLAN Multi-Protocol BGP EVPN**
 
-<form action="">
-  <input type="checkbox" id="option1" name="option1" value="Option1">
-  <label for="option1">Features</label><br>
-  <input type="checkbox" id="option2" name="option2" value="Option2">
-  <label for="option2">Interfaces IPs</label><br>
-  <input type="checkbox" id="option3" name="option3" value="Option3">
-  <label for="option3">OSPF</label><br>
-  <input type="checkbox" id="option3" name="option3" value="Option3">
-  <label for="option3">PIM</label><br>
-  <input type="checkbox" id="option3" name="option3" value="Option3">
-  <label for="option3">MTU</label><br>
-  <input type="checkbox" id="option3" name="option3" value="Option3">
-  <label for="option3">Switch ports</label><br>
-  <input type="checkbox" id="option3" name="option3" value="Option3">
-  <label for="option3">VXLAN</label><br>
-  <input type="checkbox" id="option3" name="option3" value="Option3">
-  <label for="option3">EVPN</label><br>
-</form>
+With this type, flooding is reduced by distributing MAC reachability information via MP-BGP EVPN to optimize flooding relating to L2 unknown unicast traffic. Optimization of reducing broadcasts associated with ARP/IPv6 Neighbor solicitation is achieved by distributing the necessary information via MPBGP EVPN. The information is then cached at the access switches. Address solicitation requests can be responded locally without sending a broadcast to the rest of the fabric.
 
-<img src='documentation/media/vxlan_base.png' class='border'></img>
+# [Config] Underlay
 
-#### Prerequisites
+<img src="documentation/media/vxlan_underlay.png" class="border">
+Underlay Network Topology
 
+In the above image, the leaf switches (V1 and V2) are at the middle of the image. They are connected to the 1 spine switch (S1) that are depicted at the top of the image.
+
+First step of configuring VXLAN is establishing a underlay network. In this example we will use OSPF and PIM Anycast.
+
+<div style="width: 49%; float: left;">
+
+<code>[V1]</code>
 <pre>
 feature ospf
-feature bgp
 feature pim
-feature interface-vlan
-feature vn-segment-vlan-based
-feature nv overlay
-nv overlay evpn
+
+ip pim rp-address 10.1.1.100
+
+router ospf UNDERLAY
+
+interface Ethernet 1/1
+  description Link to Spine S1
+  ip address 10.0.0.2/31
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+
+interface Loopback 0
+  ip address 10.1.1.1/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
 </pre>
 
-#### OSPF Configs
+</div>
+<div style="width: 49%; float: right;">
 
+<code>[V2]</code>
 <pre>
-<span>Spine</span>
-<hr>router ospf 1
-!
+feature ospf
+feature pim
+
+ip pim rp-address 10.1.1.100
+
+router ospf UNDERLAY
+
+interface Ethernet 1/1
+  description Link to Spine S1
+  ip address 10.0.0.6/31
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+
+interface Loopback 0
+  ip address 10.1.1.2/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+</pre>
+
+</div>
+
+<code>[S1]</code>
+<pre>
+feature ospf
+feature pim
+
 ip pim rp-address 10.1.1.100
 ip pim anycast-rp 10.1.1.100 10.0.0.1
 ip pim anycast-rp 10.1.1.100 10.0.0.5
-!
-interface Ethernet1/1
-  no switchport
-  mtu 9216
-  ip address 10.0.0.1/30
-  ip router ospf 1 area 0.0.0.0
-  ip pim sparse-mode
-  no shutdown
-!
-interface Ethernet1/2
-  no switchport
-  mtu 9216
-  ip address 10.0.0.5/30
-  ip router ospf 1 area 0.0.0.0
-  ip pim sparse-mode
-  no shutdown
-!
-interface loopback0
-  ip address 10.1.1.100/32
-  ip router ospf 1 area 0.0.0.0
-  ip pim sparse-mode
-</pre>
 
-<pre>
-<span>9K-1 & 9K-2</span>
-<hr>router ospf 1
-!
-ip pim rp-address 10.1.1.100
-!
-interface Ethernet1/3
-  no switchport
-  mtu 9216
-  ip address 10.0.0.2/30
-  ip router ospf 1 area 0.0.0.0
+router ospf UNDERLAY
+
+interface Ethernet 1/1
+  description Link to VTEP V1
+  ip address 10.0.0.1/31
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
   ip pim sparse-mode
-  no shutdown
-!
-interface loopback0
-  ip address 10.1.1.1/32
-  ip router ospf 1 area 0.0.0.0
+
+interface Ethernet 1/2
+  description Link to VTEP V2
+  ip address 10.0.0.2/31
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+
+interface Loopback 0
+  ip address 10.0.0.100/32
+  ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
 </pre>
 
-#### VXLAN Configs
+To verify the OSPF configurations, check the OSPF neighbourships and databases with <code>show ip ospf neighbors</code> and <code>show ip ospf database</code> respectively. This should return confirmations that the OSPF adjacencies are up and the databases are synchronized.
 
-<pre>
-<span>9K-1 & 9K-2</span>
-<br>vlan 10
-  vn-segment 100000
-!
-interface Eth1/1
-  no shutdown
-  switchport access vlan 10
-!
-interface nve1
-  no shutdown
-  source-interface loopback0
-  member vni 100000
-    mcast-group 239.1.1.1
-</pre>
+To verify the PIM configuration, check the PIM neighbourships with <code>show ip pim rp</code> or <code>show ip pim rp</code>. This should return confirmations that the PIM adjacencies are up.
 
-#### EVPN Configs
+# [Config] Overlay (Flood and Learn)
 
-<pre>
-<span>Spine</span>
-<hr>router bgp 65000
-  address-family ipv4 unicast
-  address-family l2vpn evpn
-  neighbor 10.0.0.2
-    remote-as 65000
-    address-family ipv4 unicast
-      route-reflector-client
-    address-family l2vpn evpn
-      send-community extended
-      route-reflector-client
-  neighbor 10.0.0.6
-    remote-as 65000
-    address-family ipv4 unicast
-      route-reflector-client
-    address-family l2vpn evpn
-      send-community extended
-      route-reflector-client
-</pre>
-
-<pre>
-<span>9K-1 & 9K-2</span>
-<hr>evpn
-  vni 100000 l2
-    rd auto
-    route-target both auto
-!
-fabric forwarding anycast-gateway-mac a.a.a
-!
-vlan 333
-  vn-segment 333333
-!
-vrf context VXVRF
-  vni 333333
-  rd auto
-  address-family ipv4 unicast
-    route-target both auto
-    route-target both auto evpn
-!
-interface vlan 10
-  no shutdown
-  vrf member VXVRF
-  ip address 10.10.10.1/24
-  fabric forwarding mode anycast-gateway
-!
-interface vlan 333
-  no shutdown
-  vrf member VXVRF
-  ip forward
-!
-interface nve 1
-  host-reachability protocol bgp
-  member vni 333333 associate-vrf
-!
-route-map PERMIT_ALL permit 10
-!
-interface loopback 1
-  no shutdown
-  ip address 1.1.1.1/32
-!
-router bgp 65000
-  address-family ipv4 unicast
-    network 1.1.1.1/32
-  address-family l2vpn evpn
-  neighbor 10.0.0.1
-    remote-as 65000
-    address-family ipv4 unicast
-    address-family l2vpn evpn
-      send-community extended
-  vrf VXVRF
-    address-family ipv4 unicast
-      redistribute direct route-map PERMIT_ALL
-</pre>
-
-#### Verification
-
-<pre>
-show nve peers
-show vxlan
-</pre>
-
+# [Config] Overlay (MP-BGP EVPN)
