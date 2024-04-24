@@ -61,6 +61,7 @@ interface Ethernet 1/3
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
   ip pim sparse-mode
+  no shutdown
 
 interface Loopback 0
   ip address 10.1.1.1/32
@@ -88,6 +89,7 @@ interface Ethernet 1/3
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
   ip pim sparse-mode
+  no shutdown
 
 interface Loopback 0
   ip address 10.1.1.2/32
@@ -116,6 +118,7 @@ interface Ethernet 1/1
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
   ip pim sparse-mode
+  no shutdown
 
 interface Ethernet 1/2
   description Link to VTEP V2
@@ -125,6 +128,7 @@ interface Ethernet 1/2
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
   ip pim sparse-mode
+  no shutdown
 
 interface Loopback 0
   ip address 10.0.0.100/32
