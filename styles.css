@@ -1,15 +1,4 @@
-@font-face {
-  font-family: 'fabfont';
-  src: url('/font/DejaVuSansMono.woff2');
-  font-display: block;
-}
 
-@font-face {
-  font-family: 'fabfont';
-  src: url('/font/DejaVuSansMono-Bold.woff2');
-  font-weight: bold;
-  font-display: block;
-}
 
 * {
   font-size: 16px;
@@ -81,46 +70,12 @@ canvas.pixel {
   image-rendering: crisp-edges;
 }
 
-blockquote {
-  background-color: #f3f3f3;
-  border: dashed 1px grey;
-  width: 97.5%;
-  font-style: italic;
-  text-align: justify;
-
-  padding: 1ch;
-  padding-top: 2ch;
-  padding-bottom: 2ch;
-
-  margin: 0ch;
-  margin-bottom: 2ch;
-  margin-top: 0ch;
-}
-
-blockquote div {
-  text-transform: none;
-  text-align: right;
-  width: 100%;
-}
-
 code {
   font-weight: bold;
   background-color: #e1e1e1;
   border-radius: 0.5ch;
   padding-left: 0.3ch;
   padding-right: 0.3ch;
-}
-
-.trivia {
-  border-left: 1px black solid;
-  padding-left: 1ch;
-}
-
-.trivia::before {
-  font-weight: bold;
-  text-decoration: underline;
-  padding-right: 1ch;
-  content: "Trivia:";
 }
 
 .button-container {
