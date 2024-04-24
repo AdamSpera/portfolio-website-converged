@@ -96,6 +96,7 @@
           url: "/documentation",
           cache: true,
           success: function (result) {
+            console.log('Successfully fetched documentation data:', result);
             // store the time of the request and the data in localStorage
             localStorage.setItem('lastRequestTime', currentTime);
             localStorage.setItem('cachedData', JSON.stringify(result));
