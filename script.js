@@ -136,3 +136,23 @@ function filterByTopic(topic) {
 
   console.log(activeTopics);
 }
+
+function expandSearch() {
+  var searchBar = $('#search');
+
+  searchBar.slideToggle(0, function() {
+    if (searchBar.is(':visible')) {
+      searchBar.focus();
+    }
+  });
+
+  searchBar.keyup(function() {
+    var searchTerm = $(this).val().toLowerCase();
+
+    console.log(searchTerm);
+
+    $('.docs a').css('color', '').filter(function() {
+      return searchTerm && !$(this).text().toLowerCase().includes(searchTerm);
+    }).css('color', 'grey');
+  });
+}

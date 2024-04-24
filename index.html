@@ -7,6 +7,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=12.0, minimum-scale=1.0, user-scalable=yes">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js"></script>
 </head>
@@ -108,6 +109,10 @@
     <div class="heading">Documentation</div>
     <hr>
     <div class="button-container">
+      <button class="toggle-button">
+        <i class="fas fa-search" onclick="expandSearch()" style="font-size: 13px" id="search-icon"></i>
+        <input type="text" id="search" class="searchInput" style="display: none;">
+      </button>
       <button class="toggle-button" onclick="filterByTopic('Networking')">Networking</button>
       <button class="toggle-button" onclick="filterByTopic('Programming')">Programming</button>
       <button class="toggle-button" onclick="filterByTopic('Automation')">Automation</button>
