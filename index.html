@@ -100,6 +100,9 @@
             localStorage.setItem('lastRequestTime', currentTime);
             localStorage.setItem('cachedData', JSON.stringify(result));
             populateDocs(result);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error making AJAX request to /documentation:', textStatus, errorThrown);
           }
         });
       }
@@ -127,39 +130,38 @@
           $('#docs').find('h1, h2, h3, h4, h5, h6').addClass('heading');
           $('#docs').find('h1, h2, h3, h4, h5, h6').after('<hr>');
           // $('#docs').find('hr:first').after('<br>');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error('Error making AJAX request to /documentation:', textStatus, errorThrown);
         }
       });
     }
 
     function populateDocs(result) {
-      if (Array.isArray(result)) {
-        var fileNames = result.map(function (file) {
-          return file.name;
+      var fileNames = result.map(function (file) {
+        return file.name;
+      });
+
+      var docsElement = $(".docs");
+      docsElement.empty();
+
+      fileNames.forEach(function (fileName) {
+        var splitName = fileName.split(' ');
+        var topics = splitName[0];
+        var name = splitName.slice(1).join(' ').replace('.md', '');
+
+        // Remove the tags from the name
+        name = name.replace(/\[.*?\]/g, '').trim();
+
+        var link = $("<a href='#' data-topic='" + topics + "'>" + name + "</a>");
+        link.click(function (e) {
+          e.preventDefault();
+          window.history.pushState({}, '', '?doc=' + encodeURIComponent(topics + " " + name));
+          loadDoc(topics + " " + name);
         });
 
-        var docsElement = $(".docs");
-        docsElement.empty();
-
-        fileNames.forEach(function (fileName) {
-          var splitName = fileName.split(' ');
-          var topics = splitName[0];
-          var name = splitName.slice(1).join(' ').replace('.md', '');
-
-          // Remove the tags from the name
-          name = name.replace(/\[.*?\]/g, '').trim();
-
-          var link = $("<a href='#' data-topic='" + topics + "'>" + name + "</a>");
-          link.click(function (e) {
-            e.preventDefault();
-            window.history.pushState({}, '', '?doc=' + encodeURIComponent(topics + " " + name));
-            loadDoc(topics + " " + name);
-          });
-
-          docsElement.append("- ").append(link).append("<br>");
-        });
-      } else {
-        console.error('Expected an array but got', result);
-      }
+        docsElement.append("- ").append(link).append("<br>");
+      });
     }
 
     function filterByTopic(topic) {
