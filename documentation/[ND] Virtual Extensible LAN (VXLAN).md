@@ -67,6 +67,7 @@ interface Loopback 0
   ip address 10.1.1.1/32
   ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
+  no shutdown
 </pre>
 
 </div>
@@ -95,6 +96,7 @@ interface Loopback 0
   ip address 10.1.1.2/32
   ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
+  no shutdown
 </pre>
 
 </div>
@@ -134,6 +136,7 @@ interface Loopback 0
   ip address 10.0.0.100/32
   ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
+  no shutdown
 </pre>
 
 To verify the OSPF configurations, check the OSPF neighbourships and databases with <code>show ip ospf neighbors</code> and <code>show ip ospf database</code> respectively. This should return confirmations that the OSPF adjacencies are up and the databases are synchronized.
