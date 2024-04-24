@@ -139,6 +139,14 @@ code {
 
 .docs > a {
   text-decoration: none;
+  cursor: pointer;
+}
+
+.docs > a:hover {
+  background-color: #ddd;
+  padding: 1.5px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .grey-out {
