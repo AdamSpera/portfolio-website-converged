@@ -53,7 +53,7 @@ ip pim rp-address 10.1.1.100
 
 router ospf UNDERLAY
 
-interface Ethernet 1/1
+interface Ethernet 1/3
   description Link to Spine S1
   ip address 10.0.0.2/31
   mtu 9192
@@ -79,7 +79,7 @@ ip pim rp-address 10.1.1.100
 
 router ospf UNDERLAY
 
-interface Ethernet 1/1
+interface Ethernet 1/3
   description Link to Spine S1
   ip address 10.0.0.6/31
   mtu 9192
