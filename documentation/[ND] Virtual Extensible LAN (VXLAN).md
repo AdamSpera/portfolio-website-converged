@@ -356,8 +356,6 @@ To verify the MP-BGP EVPN configuration, check the BGP neighbourships with <code
 
 **INCOMPLETE**
 
-**CONFIGS WILL PROVIDE NORMAL VXLAN CONNECTIVITY BUT NOT CDP**
-
 This part of the configuration is OPTIONAL. VXLAN Xconnect is a mechanism for a point-to-point tunnel for data and control packets from one Leaf to another. Inner Dot1q Tags are preserved and VXLAN encapsulated within the outer VNID which is specified as the Xconnect VNID. Layer 2 Control Frames such as Link Layer Discovery Protocol (LLDP), Cisco Discovery Protocol (CDP), Spanning Tree Protocol (STP) are VXLAN Encapsulated and sent over to other ends of the Tunnel.
 
 <div style="width: 49%; float: left;">
