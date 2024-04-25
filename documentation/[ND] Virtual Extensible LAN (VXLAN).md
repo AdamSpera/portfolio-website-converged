@@ -141,8 +141,55 @@ interface Loopback 0
 
 To verify the OSPF configurations, check the OSPF neighbourships and databases with <code>show ip ospf neighbors</code> and <code>show ip ospf database</code> respectively. This should return confirmations that the OSPF adjacencies are up and the databases are synchronized.
 
-To verify the PIM configuration, check the PIM neighbourships with <code>show ip pim rp</code> or <code>show ip pim rp</code>. This should return confirmations that the PIM adjacencies are up.
+To verify the PIM configuration, check the PIM neighbourships with <code>show ip pim rp</code>. This should return confirmations that the PIM adjacencies are up.
 
 # [Config] Overlay (Flood and Learn)
+
+<div style="width: 49%; float: left;">
+
+<code>[V1]</code>
+<pre>
+feature vn-segment-vlan-based
+feature nv overlay
+nv overlay evpn
+
+vlan 10
+  vn-segment 123456
+
+interface Eth1/1
+  no shutdown
+  switchport access vlan 10
+
+interface nve1
+  no shutdown
+  source-interface loopback0
+  member vni 123456
+    mcast-group 239.1.1.1
+</pre>
+
+</div>
+<div style="width: 49%; float: right;">
+
+<code>[V2]</code>
+<pre>
+feature vn-segment-vlan-based
+feature nv overlay
+nv overlay evpn
+
+vlan 10
+  vn-segment 123456
+
+interface Eth1/1
+  no shutdown
+  switchport access vlan 10
+
+interface nve1
+  no shutdown
+  source-interface loopback0
+  member vni 123456
+    mcast-group 239.1.1.1
+</pre>
+
+</div>
 
 # [Config] Overlay (MP-BGP EVPN)
