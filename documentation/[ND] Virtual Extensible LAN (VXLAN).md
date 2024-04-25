@@ -349,3 +349,42 @@ router bgp 65000
 </pre>
 
 </div>
+
+To verify the MP-BGP EVPN configuration, check the BGP neighbourships with <code>show bgp l2vpn evpn summary</code>. This should return confirmations that the BGP adjacencies are up.
+
+# [Config] Overlay (Xconnect)
+
+This part of the configuration is OPTIONAL. VXLAN Xconnect is a mechanism for a point-to-point tunnel for data and control packets from one Leaf to another. Inner Dot1q Tags are preserved and VXLAN encapsulated within the outer VNID which is specified as the Xconnect VNID. Layer 2 Control Frames such as Link Layer Discovery Protocol (LLDP), Cisco Discovery Protocol (CDP), Spanning Tree Protocol (STP) are VXLAN Encapsulated and sent over to other ends of the Tunnel.
+
+<div style="width: 49%; float: left;">
+
+<code>[V1]</code>
+<pre>
+vlan 10
+  xconnect
+
+interface Eth1/1
+  switchport mode dot1q-tunnel
+</pre>
+
+</div>
+<div style="width: 49%; float: right;">
+
+<code>[V2]</code>
+<pre>
+vlan 10
+  xconnect
+
+interface Eth1/1
+  switchport mode dot1q-tunnel
+</pre>
+
+</div>
+
+Then copy the running config to the startup config with <code>copy running-config startup-config</code> to save the configuration, then reboot the device with <code>reload</code>.
+
+To verify these configurations, check the VNI with <code>show nve 123456</code>. This should return confirmations that the VNI is up and running the flag Xconnect.
+
+
+
+
