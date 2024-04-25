@@ -145,7 +145,7 @@ To verify the PIM configuration, check the PIM neighbourships with <code>show ip
 
 # [Config] Overlay (Flood and Learn)
 
-In teh following command snippets, we will configure switchports that are configured with VLAN 10 to be part of the VNI 12345 VLAN. The VTEP interfaces are configured such that the VNI 123456 is part of the 239.1.1.1 multicast group.
+In the following command snippets, we will configure switchports that are configured with VLAN 10 to be part of the VNI 12345 VLAN. The VTEP interfaces are configured such that the VNI 123456 is part of the 239.1.1.1 multicast group.
 
 <div style="width: 49%; float: left;">
 
@@ -194,4 +194,7 @@ interface nve1
 
 </div>
 
+To verify the VXLAN configuration, check the VXLAN tunnel status with <code>show nve peers</code>, <code>show nve vni</code>, <code>show vxlan</code>. This should return confirmations that the VXLAN tunnels are up and the VNIs are configured correctly.
+
 # [Config] Overlay (MP-BGP EVPN)
+
