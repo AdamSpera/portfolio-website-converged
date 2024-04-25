@@ -268,13 +268,13 @@ interface nve 1
 
 interface loopback 1
   no shutdown
-  ip address 2.2.2.2/32
+  ip address 1.1.1.1/32
 
 route-map PERMIT_ALL permit 10
 
 router bgp 65000
   address-family ipv4 unicast
-    network 2.2.2.2/32
+    network 1.1.1.1/32
   address-family l2vpn evpn
   neighbor 10.0.0.1
     remote-as 65000
@@ -330,13 +330,13 @@ interface nve 1
 
 interface loopback 1
   no shutdown
-  ip address 1.1.1.1/32
+  ip address 2.2.2.2/32
 
 route-map PERMIT_ALL permit 10
 
 router bgp 65000
   address-family ipv4 unicast
-    network 1.1.1.1/32
+    network 2.2.2.2/32
   address-family l2vpn evpn
   neighbor 10.0.0.5
     remote-as 65000
