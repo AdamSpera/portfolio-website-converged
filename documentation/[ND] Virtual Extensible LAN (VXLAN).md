@@ -125,7 +125,7 @@ interface Ethernet 1/1
 interface Ethernet 1/2
   description Link to VTEP V2
   no switchport
-  ip address 10.0.0.5/31
+  ip address 10.0.0.5/30
   mtu 9192
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
