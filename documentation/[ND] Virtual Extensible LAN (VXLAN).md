@@ -381,7 +381,7 @@ vlan 10
 
 Then copy the running config to the startup config with <code>copy running-config startup-config</code> to save the configuration, then reboot the device with <code>reload</code>.
 
-To verify these configurations, check the VNI with <code>show nve vni 123456</code>. This should return confirmations that the VNI is up and running the flag Xconnect. At this point if you place a L2 device in the access port and run <code>show cdp neighbors</code> it should see no neighbors.
+To verify these configurations, check the VNI with <code>show nve vni 123456</code>. This should return confirmations that the VNI is up and running the flag Xconnect.
 
 
 
