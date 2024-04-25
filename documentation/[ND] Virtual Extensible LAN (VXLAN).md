@@ -366,9 +366,6 @@ This part of the configuration is OPTIONAL. VXLAN Xconnect is a mechanism for a 
 <pre>
 vlan 10
   xconnect
-
-interface Eth1/1
-  switchport mode dot1q-tunnel
 </pre>
 
 </div>
@@ -378,9 +375,6 @@ interface Eth1/1
 <pre>
 vlan 10
   xconnect
-
-interface Eth1/1
-  switchport mode dot1q-tunnel
 </pre>
 
 </div>
