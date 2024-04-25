@@ -42,44 +42,6 @@ In the above image, the leaf switches (V1 and V2) are at the middle of the image
 
 First step of configuring VXLAN is establishing a underlay network. In this example we will use OSPF and PIM Anycast.
 
-<code>[S1]</code>
-<pre>
-feature ospf
-feature pim
-
-ip pim rp-address 10.1.1.100
-ip pim anycast-rp 10.1.1.100 10.0.0.1
-ip pim anycast-rp 10.1.1.100 10.0.0.5
-
-router ospf UNDERLAY
-
-interface Ethernet 1/1
-  description Link to VTEP V1
-  no switchport
-  ip address 10.0.0.1/30
-  mtu 9192
-  ip router ospf UNDERLAY area 0.0.0.0
-  ip ospf network point-to-point
-  ip pim sparse-mode
-  no shutdown
-
-interface Ethernet 1/2
-  description Link to VTEP V2
-  no switchport
-  ip address 10.0.0.5/30
-  mtu 9192
-  ip router ospf UNDERLAY area 0.0.0.0
-  ip ospf network point-to-point
-  ip pim sparse-mode
-  no shutdown
-
-interface Loopback 0
-  ip address 10.1.1.100/32
-  ip router ospf UNDERLAY area 0.0.0.0
-  ip pim sparse-mode
-  no shutdown
-</pre>
-
 <div style="width: 49%; float: left;">
 
 <code>[V1]</code>
@@ -138,6 +100,44 @@ interface Loopback 0
 </pre>
 
 </div>
+
+<code>[S1]</code>
+<pre>
+feature ospf
+feature pim
+
+ip pim rp-address 10.1.1.100
+ip pim anycast-rp 10.1.1.100 10.0.0.1
+ip pim anycast-rp 10.1.1.100 10.0.0.5
+
+router ospf UNDERLAY
+
+interface Ethernet 1/1
+  description Link to VTEP V1
+  no switchport
+  ip address 10.0.0.1/30
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet 1/2
+  description Link to VTEP V2
+  no switchport
+  ip address 10.0.0.5/30
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+  no shutdown
+
+interface Loopback 0
+  ip address 10.1.1.100/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+</pre>
 
 To verify the OSPF configurations, check the OSPF neighbourships and databases with <code>show ip ospf neighbors</code> and <code>show ip ospf database</code> respectively. This should return confirmations that the OSPF adjacencies are up and the databases are synchronized.
 
