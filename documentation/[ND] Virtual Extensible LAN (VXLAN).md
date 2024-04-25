@@ -145,6 +145,8 @@ To verify the PIM configuration, check the PIM neighbourships with <code>show ip
 
 # [Config] Overlay (Flood and Learn)
 
+In teh following command snippets, we will configure switchports that are configured with VLAN 10 to be part of the VNI 12345 VLAN. The VTEP interfaces are configured such that the VNI 123456 is part of the 239.1.1.1 multicast group.
+
 <div style="width: 49%; float: left;">
 
 <code>[V1]</code>
