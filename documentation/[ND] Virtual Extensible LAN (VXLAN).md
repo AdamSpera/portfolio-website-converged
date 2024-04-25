@@ -42,6 +42,44 @@ In the above image, the leaf switches (V1 and V2) are at the middle of the image
 
 First step of configuring VXLAN is establishing a underlay network. In this example we will use OSPF and PIM Anycast.
 
+<code>[S1]</code>
+<pre>
+feature ospf
+feature pim
+
+ip pim rp-address 10.1.1.100
+ip pim anycast-rp 10.1.1.100 10.0.0.1
+ip pim anycast-rp 10.1.1.100 10.0.0.5
+
+router ospf UNDERLAY
+
+interface Ethernet 1/1
+  description Link to VTEP V1
+  no switchport
+  ip address 10.0.0.1/30
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet 1/2
+  description Link to VTEP V2
+  no switchport
+  ip address 10.0.0.5/30
+  mtu 9192
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip ospf network point-to-point
+  ip pim sparse-mode
+  no shutdown
+
+interface Loopback 0
+  ip address 10.1.1.100/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+</pre>
+
 <div style="width: 49%; float: left;">
 
 <code>[V1]</code>
@@ -101,44 +139,6 @@ interface Loopback 0
 
 </div>
 
-<code>[S1]</code>
-<pre>
-feature ospf
-feature pim
-
-ip pim rp-address 10.1.1.100
-ip pim anycast-rp 10.1.1.100 10.0.0.1
-ip pim anycast-rp 10.1.1.100 10.0.0.5
-
-router ospf UNDERLAY
-
-interface Ethernet 1/1
-  description Link to VTEP V1
-  no switchport
-  ip address 10.0.0.1/30
-  mtu 9192
-  ip router ospf UNDERLAY area 0.0.0.0
-  ip ospf network point-to-point
-  ip pim sparse-mode
-  no shutdown
-
-interface Ethernet 1/2
-  description Link to VTEP V2
-  no switchport
-  ip address 10.0.0.5/30
-  mtu 9192
-  ip router ospf UNDERLAY area 0.0.0.0
-  ip ospf network point-to-point
-  ip pim sparse-mode
-  no shutdown
-
-interface Loopback 0
-  ip address 10.1.1.100/32
-  ip router ospf UNDERLAY area 0.0.0.0
-  ip pim sparse-mode
-  no shutdown
-</pre>
-
 To verify the OSPF configurations, check the OSPF neighbourships and databases with <code>show ip ospf neighbors</code> and <code>show ip ospf database</code> respectively. This should return confirmations that the OSPF adjacencies are up and the databases are synchronized.
 
 To verify the PIM configuration, check the PIM neighbourships with <code>show ip pim rp</code>. This should return confirmations that the PIM adjacencies are up.
@@ -196,3 +196,156 @@ To verify the VXLAN configuration, check the VXLAN tunnel status with <code>show
 
 # [Config] Overlay (MP-BGP EVPN)
 
+In the following command snippets, we will configure MP-BGP EVPN to distribute MAC and MCAST reachability information. This includes setting up MP-BGP, EVPN, and VRFs.
+
+<code>[S1]</code>
+<pre>
+feature bgp
+feature vn-segment-vlan-based
+feature nv overlay
+
+nv overlay evpn
+
+router bgp 65000
+  address-family ipv4 unicast
+  address-family l2vpn evpn
+  neighbor 10.0.0.2
+    remote-as 65000
+    address-family ipv4 unicast
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community extended
+      route-reflector-client
+  neighbor 10.0.0.6
+    remote-as 65000
+    address-family ipv4 unicast
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community extended
+      route-reflector-client
+</pre>
+
+<div style="width: 49%; float: left;">
+
+<code>[V1]</code>
+<pre>
+feature interface-vlan
+feature bgp
+
+nv overlay evpn
+
+evpn
+  vni 123456 l2
+    rd auto
+    route-target both auto
+
+fabric forwarding anycast-gateway-mac a.a.a
+
+vlan 333
+  vn-segment 333333
+
+vrf context VXVRF
+  vni 333333
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+
+interface vlan 10
+  no shutdown
+  vrf member VXVRF
+  ip address 10.10.10.1/24
+  fabric forwarding mode anycast-gateway
+
+interface vlan 333
+  no shutdown
+  vrf member VXVRF
+  ip forward
+
+interface nve 1
+  host-reachability protocol bgp
+  member vni 333333 associate-vrf
+
+interface loopback 1
+  no shutdown
+  ip address 1.1.1.1/32
+
+route-map PERMIT_ALL permit 10
+
+router bgp 65000
+  address-family ipv4 unicast
+    network 1.1.1.1/32
+  address-family l2vpn evpn
+  neighbor 10.0.0.1
+    remote-as 65000
+    address-family ipv4 unicast
+    address-family l2vpn evpn
+      send-community extended
+  vrf VXVRF
+    address-family ipv4 unicast
+      redistribute direct route-map PERMIT_ALL
+</pre>
+
+</div>
+<div style="width: 49%; float: right;">
+
+<code>[V2]</code>
+<pre>
+feature interface-vlan
+feature bgp
+
+nv overlay evpn
+
+evpn
+  vni 123456 l2
+    rd auto
+    route-target both auto
+
+fabric forwarding anycast-gateway-mac a.a.a
+
+vlan 333
+  vn-segment 333333
+
+vrf context VXVRF
+  vni 333333
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+
+interface vlan 10
+  no shutdown
+  vrf member VXVRF
+  ip address 10.10.10.1/24
+  fabric forwarding mode anycast-gateway
+
+interface vlan 333
+  no shutdown
+  vrf member VXVRF
+  ip forward
+
+interface nve 1
+  host-reachability protocol bgp
+  member vni 333333 associate-vrf
+
+interface loopback 1
+  no shutdown
+  ip address 1.1.1.1/32
+
+route-map PERMIT_ALL permit 10
+
+router bgp 65000
+  address-family ipv4 unicast
+    network 1.1.1.1/32
+  address-family l2vpn evpn
+  neighbor 10.0.0.5
+    remote-as 65000
+    address-family ipv4 unicast
+    address-family l2vpn evpn
+      send-community extended
+  vrf VXVRF
+    address-family ipv4 unicast
+      redistribute direct route-map PERMIT_ALL
+</pre>
+
+</div>
