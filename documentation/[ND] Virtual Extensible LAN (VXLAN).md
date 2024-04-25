@@ -56,7 +56,7 @@ router ospf UNDERLAY
 interface Ethernet 1/3
   description Link to Spine S1
   no switchport
-  ip address 10.0.0.2/31
+  ip address 10.0.0.2/30
   mtu 9192
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
@@ -85,7 +85,7 @@ router ospf UNDERLAY
 interface Ethernet 1/3
   description Link to Spine S1
   no switchport
-  ip address 10.0.0.6/31
+  ip address 10.0.0.6/30
   mtu 9192
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
@@ -115,7 +115,7 @@ router ospf UNDERLAY
 interface Ethernet 1/1
   description Link to VTEP V1
   no switchport
-  ip address 10.0.0.1/31
+  ip address 10.0.0.1/30
   mtu 9192
   ip router ospf UNDERLAY area 0.0.0.0
   ip ospf network point-to-point
