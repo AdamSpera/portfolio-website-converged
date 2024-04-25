@@ -152,6 +152,7 @@ In the following command snippets, we will configure switchports that are config
 <code>[V1]</code>
 <pre>
 feature vn-segment-vlan-based
+feature nv overlay
 
 vlan 10
   vn-segment 123456
@@ -173,6 +174,7 @@ interface nve1
 <code>[V2]</code>
 <pre>
 feature vn-segment-vlan-based
+feature nv overlay
 
 vlan 10
   vn-segment 123456
