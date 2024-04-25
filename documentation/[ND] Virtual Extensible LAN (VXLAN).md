@@ -133,7 +133,7 @@ interface Ethernet 1/2
   no shutdown
 
 interface Loopback 0
-  ip address 10.0.0.100/32
+  ip address 10.1.1.100/32
   ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
   no shutdown
@@ -152,8 +152,6 @@ In the following command snippets, we will configure switchports that are config
 <code>[V1]</code>
 <pre>
 feature vn-segment-vlan-based
-feature nv overlay
-nv overlay evpn
 
 vlan 10
   vn-segment 123456
@@ -175,8 +173,6 @@ interface nve1
 <code>[V2]</code>
 <pre>
 feature vn-segment-vlan-based
-feature nv overlay
-nv overlay evpn
 
 vlan 10
   vn-segment 123456
