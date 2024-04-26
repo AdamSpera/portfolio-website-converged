@@ -68,6 +68,9 @@ $(document).ready(function () {
 });
 
 function loadDoc(doc) {
+  // Change the page title to the name of the file
+  $(document).prop('title', doc.split('] ')[1].split('.md')[0]);
+
   $('#home').hide();
   $('#docs').show();
 
@@ -80,9 +83,6 @@ function loadDoc(doc) {
       $('#docs').append(html);
       $('#docs').find('h1, h2, h3, h4, h5, h6').addClass('heading');
       $('#docs').find('h1, h2, h3, h4, h5, h6').after('<hr>');
-
-      // Change the page title to the name of the file
-      $(document).prop('title', doc.split('] ')[1].split('.md')[0]);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       console.error('Error making AJAX request to /documentation:', textStatus, errorThrown);
