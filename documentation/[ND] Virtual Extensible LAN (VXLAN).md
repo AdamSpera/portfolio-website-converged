@@ -33,7 +33,7 @@ There are two widely adopted control planes that are used with VXLAN:
 
 With this type, flooding is reduced by distributing MAC reachability information via MP-BGP EVPN to optimize flooding relating to L2 unknown unicast traffic. Optimization of reducing broadcasts associated with ARP/IPv6 Neighbor solicitation is achieved by distributing the necessary information via MPBGP EVPN. The information is then cached at the access switches. Address solicitation requests can be responded locally without sending a broadcast to the rest of the fabric.
 
-# [Config] Underlay
+# [Config] Underlay (OSPF and PIM)
 
 <img src="documentation/media/vxlan_underlay.png" class="border">
 Underlay Network Topology
@@ -142,6 +142,10 @@ interface Loopback 0
 To verify the OSPF configurations, check the OSPF neighbourships and databases with <code>show ip ospf neighbors</code> and <code>show ip ospf database</code> respectively. This should return confirmations that the OSPF adjacencies are up and the databases are synchronized.
 
 To verify the PIM configuration, check the PIM neighbourships with <code>show ip pim rp</code>. This should return confirmations that the PIM adjacencies are up.
+
+# [Config] Underlay (End Hosts)
+
+if you are using Cisco Modeling Labs as your environment, you can use the <code>sudo ifconfig eth0 10.10.10.10 netmask 255.255.255.0</code> command to set the ip address and subnet mask of the host.
 
 # [Config] Overlay (Flood and Learn)
 
