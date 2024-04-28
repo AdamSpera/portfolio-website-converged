@@ -166,7 +166,6 @@ table th {
 
 .project > a {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.8em;
   text-decoration: underline;
   color: rgb(54, 54, 54);
 }
@@ -184,6 +183,23 @@ table th {
 
 .project:last-child {
   margin-right: 0;
+}
+
+#Articles .project > a {
+  font-size: 0.8em;
+}
+
+#Projects .project > a {
+  font-size: 1em;
+}
+
+#Projects .project {
+  width: 97.5%;
+  margin-bottom: 0.9ch;
+}
+
+#Projects .project:last-child {
+  margin-bottom: 0;
 }
 
 
