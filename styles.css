@@ -202,6 +202,14 @@ table th {
   margin-bottom: 0;
 }
 
+#Certifications .project {
+  width: 97.5%;
+  margin-bottom: 0.9ch;
+}
+
+#Certifications .project:last-child {
+  margin-bottom: 0;
+}
 
 @media (max-width: 500px) {
   * {
