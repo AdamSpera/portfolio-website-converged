@@ -150,6 +150,43 @@ table th {
   border: none;
 }
 
+.project {
+  padding: 1ch;
+  border: 1px black solid;
+  width: 33%;
+}
+
+.project:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.project > small {
+  font-size: 0.8em;
+}
+
+.project > a {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8em;
+  text-decoration: underline;
+  color: rgb(54, 54, 54);
+}
+
+.projects-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.project {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.project:last-child {
+  margin-right: 0;
+}
+
+
 @media (max-width: 500px) {
   * {
     font-size: 12px;
@@ -161,5 +198,15 @@ table th {
     background-color: #ddd;
     border: none;
     cursor: pointer;
+  }
+  .projects-container {
+    flex-direction: column;
+  }
+  .project {
+    margin-bottom: 20px;
+    width: 96%;
+  }
+  .project:last-child {
+    margin-bottom: 0;
   }
 }
