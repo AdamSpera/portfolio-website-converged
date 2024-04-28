@@ -233,4 +233,10 @@ table th {
   .project:last-child {
     margin-bottom: 0;
   }
+  #Projects .project small:first-of-type {
+    display: none;
+  }
+  #Certifications .project small:first-of-type {
+    display: none;
+  }
 }
