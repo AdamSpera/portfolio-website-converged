@@ -358,32 +358,63 @@ To verify the MP-BGP EVPN configuration, check the BGP neighbourships with <code
 
 # [Config] Overlay (Xconnect)
 
-**INCOMPLETE**
+**This is an example config using only a single N9K.**
 
 This part of the configuration is OPTIONAL. VXLAN Xconnect is a mechanism for a point-to-point tunnel for data and control packets from one Leaf to another. Inner Dot1q Tags are preserved and VXLAN encapsulated within the outer VNID which is specified as the Xconnect VNID. Layer 2 Control Frames such as Link Layer Discovery Protocol (LLDP), Cisco Discovery Protocol (CDP), Spanning Tree Protocol (STP) are VXLAN Encapsulated and sent over to other ends of the Tunnel.
 
-<div style="width: 49%; float: left;">
-
-<code>[V1]</code>
+<code>[N9K]</code>
 <pre>
+feature pim
+feature vn-segment-vlan-based
+feature nv overlay
+
+nv overlay evpn
+
+ip pim rp-address 10.1.1.100
+
 vlan 10
+  vn-segment 123456
   xconnect
+
+interface nve1
+  no shutdown
+  source-interface loopback0
+  member vni 123456
+    mcast-group 239.1.1.1
+
+interface Ethernet1/1
+  switchport mode dot1q-tunnel
+  switchport access vlan 10
+  spanning-tree bpdufilter enable
+  l2protocol tunnel cdp
+  l2protocol tunnel stp
+  l2protocol tunnel vtp
+  l2protocol tunnel stp-bridge
+
+interface Ethernet1/2
+  switchport mode dot1q-tunnel
+  switchport access vlan 10
+  spanning-tree bpdufilter enable
+  l2protocol tunnel cdp
+  l2protocol tunnel stp
+  l2protocol tunnel vtp
+  l2protocol tunnel stp-bridge
+
+interface loopback0
+  ip address 10.1.1.100/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+evpn
+  vni 123456 l2
+    rd auto
+    route-target import auto
+    route-target export auto
 </pre>
-
-</div>
-<div style="width: 49%; float: right;">
-
-<code>[V2]</code>
-<pre>
-vlan 10
-  xconnect
-</pre>
-
-</div>
 
 Then copy the running config to the startup config with <code>copy running-config startup-config</code> to save the configuration, then reboot the device with <code>reload</code>.
 
-To verify these configurations, check the VNI with <code>show nve vni 123456</code>. This should return confirmations that the VNI is up and running the flag Xconnect.
+To verify these configurations, check the VNI with <code>show nve vni 123456</code>. This should return confirmations that the VNI is up and running the flag Xconnect. Then last but not least, put two layer two switches between the two end hosts and test fpor cdp neighbors with <code>show cdp neighbors</code>.
 
 
 
