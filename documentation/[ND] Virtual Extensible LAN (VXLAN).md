@@ -402,14 +402,7 @@ interface Ethernet1/2
 
 interface loopback0
   ip address 10.1.1.100/32
-  ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
-
-evpn
-  vni 123456 l2
-    rd auto
-    route-target import auto
-    route-target export auto
 </pre>
 
 Then copy the running config to the startup config with <code>copy running-config startup-config</code> to save the configuration, then reboot the device with <code>reload</code>.
